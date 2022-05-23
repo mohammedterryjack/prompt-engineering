@@ -89,12 +89,6 @@ gptj(dict(prompt="calculate the sum of even numbers from 4 to 40"))
 ```
 >  " and add it to the sum of odd numbers from 4 to 40.\n"
 
-```python
-gptj(dict(prompt="Microsoft"))
-```
-> "'s Windows 8 has been a hot topic for a while now, and we're still waiting for the final release. The operating"
-
----
 
 ```python
 from prompt_engineering import task
@@ -103,9 +97,6 @@ from prompt_engineering import task
 def python_generator(prompt:str) -> str:
     return gptj(dict(prompt=prompt))
 
-@task('hashtags')
-def predict_hashtags(prompt:str) -> str:
-    return gptj(dict(prompt=prompt))
 ```
 
 ```python
@@ -113,10 +104,24 @@ python_generator(prompt="calculate the sum of even numbers from 4 to 40")
 ```
 > "sum(x for x in range(4,41,2))\n"
 
+---
+***Example 4: Advanced Prompts***
 ```python
-predict_hashtags(prompt="Microsoft")
+from prompt_engineering import format_table
+
+@task("query_table")
+def query_table(prompt:str) -> str:    
+    return gpt3(dict(prompt=prompt))
 ```
-> "#Software, #Technology, #Internet.\n"
+```python
+table = dict(
+    name=["Majd","Oliver","Annie"],
+    favourite_food=["Pizza","Salad","Soup"],
+    gender=["Male","Male","Female"],
+)
+print(query_table(f"{format_table(table)}\nWho likes salad?"))
+```
+> "A: Oliver"
 
 ---
 ```python
