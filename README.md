@@ -88,24 +88,97 @@ calculator(prompt='equation: 4*4')
 ***Example 3: With Prepared Prompts***
 
 ```python
-gptj(dict(prompt="calculate the sum of even numbers from 4 to 40"))
-```
->  " and add it to the sum of odd numbers from 4 to 40.\n"
+from prompt_engineering import list_tasks
 
+list_tasks()
+```
+```
+(
+ 'autocomplete',
+ 'autocomplete_analogy',
+ 'autocomplete_logical',
+ 'topic_classification',
+ 'sentiment_analysis',
+ 'simplification',
+ 'summarisation',
+ 'elaboration',
+ 'horror_story',
+ 'hashtags',
+ 'grammar_correction',
+ 'translate_to_csv',
+ 'translate_to_teaser',
+ 'translate_to_german',
+ 'translate_to_french',
+ 'translate_to_spanish',
+ 'translate_to_japanese',
+ 'translate_to_python',
+ 'translate_from_french',
+ 'translate_from_python',
+ 'translate_from_emoji',
+ 'question_answering',
+ 'question_answering_javascript',
+ 'query_csv',
+ 'chatbot',
+ 'chatbot_ecommerce'
+)
+```
+---
 
 ```python
 from prompt_engineering import task
 
+@task('autocomplete_analogy')
+def generate_analogy(prompt:str) -> str:
+    return gpt3(dict(prompt=prompt))
+```
+
+```python
+generate_analogy(prompt="Marriage")
+```
+> "Marriage is like a bridge. It is built to connect two places"
+
+---
+
+```python
+@task('autocomplete_logical')
+def predict_consequence(prompt:str) -> str:
+    return gpt3(dict(prompt=prompt))
+```
+
+```python
+predict_consequence(prompt="Marriage")
+```
+> "Result: A happy couple"
+
+
+```python
+predict_consequence(prompt="Mary went to night school")
+```
+> "Result: Mary got a degree"
+
+
+```python
+predict_consequence(prompt="I fell off my bike")
+```
+> "Result: I got hurt"
+
+---
+
+```python
 @task('translate_to_python')
 def python_generator(prompt:str) -> str:
     return gptj(dict(prompt=prompt))
-
 ```
 
 ```python
 python_generator(prompt="calculate the sum of even numbers from 4 to 40")
 ```
 > "sum(x for x in range(4,41,2))\n"
+
+```python
+sum(x for x in range(4,41,2))
+```
+> 418
 
 ---
 ***Example 4: Advanced (Question Answering on a Table)***
@@ -183,44 +256,6 @@ nlu("Can i book a table at a Bento or Sushi restaurant for Friday please")
     }
   ]
 }
-```
-
----
-
-```python
-from prompt_engineering import list_tasks
-
-list_tasks()
-```
-```
-(
- 'autocomplete',
- 'autocomplete_analogy',
- 'autocomplete_logical',
- 'topic_classification',
- 'sentiment_analysis',
- 'simplification',
- 'summarisation',
- 'elaboration',
- 'horror_story',
- 'hashtags',
- 'grammar_correction',
- 'translate_to_csv',
- 'translate_to_teaser',
- 'translate_to_german',
- 'translate_to_french',
- 'translate_to_spanish',
- 'translate_to_japanese',
- 'translate_to_python',
- 'translate_from_french',
- 'translate_from_python',
- 'translate_from_emoji',
- 'question_answering',
- 'question_answering_javascript',
- 'query_csv',
- 'chatbot',
- 'chatbot_ecommerce'
-)
 ```
 ---
 
