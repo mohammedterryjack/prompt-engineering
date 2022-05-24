@@ -56,7 +56,6 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    conditional_nlg=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     topic_classification=dict(
         description=None,
         examples=[
@@ -80,7 +79,6 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    intent_classification=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     sentiment_analysis=dict(
         description="Classify the sentiment. Decide whether the sentiment is positive, neutral, or negative.",
         examples=[
@@ -112,7 +110,6 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    slot_extraction=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     simplification=dict(
         description="The following sentences contain business jargon. Rewrite them using simple words.",
         examples=[
@@ -227,6 +224,60 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
+    translate_to_csv=dict(
+        description="Slot extraction: Extract keywords and determine their type",
+        examples=[
+            (
+                "Can i book a table for me and my husband tonight? Anything free at half nine?",
+                to_csv(
+                    data=[
+                        dict(People="me and my husband",Date="tonight",Time="half nine")
+                    ],
+                    column_names=["People","Date","Time"],
+                    delimiter="|"
+                )
+            ),
+            (
+                "Is there a table free in an hour?",
+                to_csv(
+                    data=[
+                        dict(Time="in an hour",Date="today")
+                    ],
+                    column_names=["Time","Date"],
+                    delimiter="|"
+                )
+            ),
+
+            (
+                "There are many fruits that were found on the recently discovered planet Goocrux. There are neoskizzles that grow there, which are purple and taste like candy. There are also loheckles, which are a grayish blue fruit and are very tart, a little bit like a lemon. Pounits are a bright green color and are more savory than sweet. There are also plenty of loopnovas which are a neon pink flavor and taste like cotton candy. Finally, there are fruits called glowls, which have a very sour and bitter taste which is acidic and caustic, and a pale orange tinge to them.",
+                to_csv(
+                    data=[
+                        {"Fruit":"Neoskizzle","Color":"Purple","Flavor":"Sweet"},
+                        {"Fruit":"Loheckle","Color":"Grayish blue","Flavor":"Tart"},
+                        {"Fruit":"Pounit","Color":"Bright green","Flavor":"Savory"},
+                        {"Fruit":"Loopnova","Color":"Neon pink","Flavor":"Cotton candy"},
+                        {"Fruit":"Glowl","Color":"Pale orange","Flavor":"Sour and bitter"},
+                    ],
+                    column_names=["Fruit","Color","Flavor"],
+                    delimiter="|"                    
+                ),
+            ),
+            (
+                "Judy has a 3 o'clock meeting at Walmart. Mike has a 2pm call with Sainsburys. Mary don't forget to collect your dry cleaning at 1pm sharp!",
+                to_csv(
+                    data=[
+                        {"People":"Judy","Time":"3 O'clock","Location":"Walmart"},
+                        {"People":"Mike","Time":"2pm","Location":"Sainsburys"},
+                        {"People":"Mary","Time":"1pm", "Location":""}
+                    ],
+                    column_names=["People","Time","Location"],
+                    delimiter="|"                    
+                )
+            )
+        ],
+        example_delimiter="\n###\n",
+        input_target_delimiter="\n"
+    ),
     translate_to_teaser=dict(
         description="Write a creative ad for the following product to run on Facebook aimed at parents:",
         examples=[
@@ -286,39 +337,6 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),    
-    translate_to_csv=dict(
-        description="A table summarizing the information in the text:",
-        examples=[
-            (
-                "There are many fruits that were found on the recently discovered planet Goocrux. There are neoskizzles that grow there, which are purple and taste like candy. There are also loheckles, which are a grayish blue fruit and are very tart, a little bit like a lemon. Pounits are a bright green color and are more savory than sweet. There are also plenty of loopnovas which are a neon pink flavor and taste like cotton candy. Finally, there are fruits called glowls, which have a very sour and bitter taste which is acidic and caustic, and a pale orange tinge to them.",
-                to_csv(
-                    data=[
-                        {"Fruit":"Neoskizzle","Color":"Purple","Flavor":"Sweet"},
-                        {"Fruit":"Loheckle","Color":"Grayish blue","Flavor":"Tart"},
-                        {"Fruit":"Pounit","Color":"Bright green","Flavor":"Savory"},
-                        {"Fruit":"Loopnova","Color":"Neon pink","Flavor":"Cotton candy"},
-                        {"Fruit":"Glowl","Color":"Pale orange","Flavor":"Sour and bitter"},
-                    ],
-                    column_names=["Fruit","Color","Flavor"],
-                    delimiter="|"                    
-                ),
-            ),
-            (
-                "Judy has a 3 o'clock meeting at Walmart. Mike has a 2pm call with Sainsburys. Mary don't forget to collect your dry cleaning at 1pm sharp!",
-                to_csv(
-                    data=[
-                        {"Who":"Judy","When":"3 O'clock","What":"meeting", "Where":"Walmart"},
-                        {"Who":"Mike","When":"2pm","What":"call", "Where":"Sainsburys"},
-                        {"Who":"Mary","When":"1pm","What":"dry cleaning", "Where":"None"}
-                    ],
-                    column_names=["Who","When","What","Where"],
-                    delimiter="|"                    
-                )
-            )
-        ],
-        example_delimiter="\n###\n",
-        input_target_delimiter="\n\n"
-    ),
     translate_to_python=dict(
         description='Write a Python program for the instructions given',
         examples=[
@@ -332,13 +350,36 @@ PROMPTS = dict(
             ),
             (
                 "make a delay for 10 seconds",
-                "time.sleep(10)"
+                "from time import sleep; sleep(10)"
+            ),
+            (
+                "access the last element of list m",
+                "m[-1]"
+            ),
+            (
+                "sort a list q from high to low",
+                "q.sort(reverse=True)"
+            ),
+            (
+                "find the most common element of a list c",
+                "from collections import Counter; Counter(c).most_common()"
+            ),
+            (
+                "count the occurrences of an element m in list b",
+                "b.count(m)"
+            ),
+            (
+                "find the length of list b",
+                "len(b)"
+            ),
+            (
+                "convert a list of strings, b, into a list of integers",
+                "list(map(int,b))"
             )
         ],
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    translate_to_javascript=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     translate_from_french=dict(
         description="Translate this into English:",
         examples=[
@@ -350,7 +391,6 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    translate_from_csv=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     translate_from_python=dict(
         description="Explain what the python code does:",
         examples=[
@@ -640,7 +680,6 @@ Max: Sure. Can you share her exact size?
         example_delimiter="\n",
         input_target_delimiter="\n"
     ),
-    chatbot_contextual=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
 )
 
 list_tasks = lambda : tuple(PROMPTS.keys())

@@ -8,7 +8,9 @@ pip install prompt_engineering
 ```python
 from prompt_engineering import api
 ```
+
 *Note: cache is enabled by default for all api calls. To allow for different responses, turn off cache*
+
 ---
 ### Jurassic (AI21Studio)
 ```python
@@ -106,7 +108,7 @@ python_generator(prompt="calculate the sum of even numbers from 4 to 40")
 > "sum(x for x in range(4,41,2))\n"
 
 ---
-***Example 4: Advanced Prompts***
+***Example 4: Advanced (Question Answering on a Table)***
 ```python
 from prompt_engineering import to_csv
 
@@ -144,8 +146,45 @@ query_table(prompt=f'{table}\nWhat is the yellow fruit?')
 ```
 > "A: Banana"
 
-
 ---
+***Example 5: Advanced (NLU)***
+
+```python
+from prompt_engineering import from_csv
+
+@task("topic_classification")
+def intent_classification(prompt:str) -> str:
+    return gpt3(dict(prompt=prompt))
+
+@task("translate_to_csv")
+def slot_extraction(prompt:str) -> str:    
+    return gpt3(dict(prompt=prompt))
+
+def nlu(prompt:str) -> dict:
+    intent = intent_classification(prompt)
+    slots = slot_extraction(prompt)
+    return dict(
+        Intent = intent.lstrip('The topic of this article is:'),
+        Slots = from_csv(lines=slots.strip().split('\n'), delimiter="|")
+    )
+```
+
+```python
+nlu("Can i book a table at a Bento or Sushi restaurant for Friday please")
+```
+
+```json
+{
+  "Intent": "Food",
+  "Slots": [
+    {
+      "Restaurant type": "Bento or Sushi",
+      "Date": "Friday"
+    }
+  ]
+}```
+---
+
 ```python
 from prompt_engineering import list_tasks
 
@@ -188,7 +227,14 @@ chatbot_contextual
 ---
 
 ## ChangeLog
+- 0.0.5 more prompts added. from_csv method added. nlu example
 - 0.0.4 more prompts added
 - 0.0.3 to_csv method added. cache flag added to @api
 - 0.0.2 more prompts added
 - 0.0.1 initial release
+
+---
+## TODO
+- [x] complete all prompts
+- [] add decorator to dynamically update prompt with prior response (for context)
+- [] add contextual chatbot prompt

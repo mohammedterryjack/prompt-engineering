@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 DESCRIPTION = 'abstraction for language model priming / prompt engineering'
 LONG_DESCRIPTION = 'Ready made prompts for GPT3 or create your own in seconds'
 

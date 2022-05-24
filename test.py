@@ -1,5 +1,6 @@
 from os import environ
 from prompt_engineering import task, api
+from prompt_engineering.utils import to_csv
 
 @api(endpoint="https://api.openai.com/v1/engines/text-davinci-002/completions", key=environ["OPENAI_KEY"], hyperparameters=dict(temperature=.6))
 def gpt3(data:dict) -> None:
@@ -14,12 +15,23 @@ def jurassic(data:dict) -> str:
     return data['completions'][0]['data']['text']
 
 
-@task("chatbot")
-def bla(prompt:str) -> str:    
-    print(prompt)
-    return jurassic(dict(prompt=prompt))
+@task("topic_classification")
+def intent_classification(prompt:str) -> str:
+    return gpt3(dict(prompt=prompt))
 
+@task("translate_to_csv")
+def slot_extraction(prompt:str) -> str:    
+    return gpt3(dict(prompt=prompt))
 
-PROMPT = "What do you think about marriage?"
-#print(jurassic(dict(prompt=PROMPT)))
-print(bla(PROMPT))
+from prompt_engineering import from_csv
+
+def nlu(prompt:str) -> dict:
+    intent = intent_classification(prompt)
+    slots = slot_extraction(prompt)
+    return dict(
+        Intent = intent.lstrip('The topic of this article is:'),
+        Slots = from_csv(lines=slots.strip().split('\n'), delimiter="|")
+    )
+
+utterance = "Can i book a table at a Bento or Sushi restaurant for Friday please"
+nlu(utterance)
