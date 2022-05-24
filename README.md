@@ -182,7 +182,9 @@ nlu("Can i book a table at a Bento or Sushi restaurant for Friday please")
       "Date": "Friday"
     }
   ]
-}```
+}
+```
+
 ---
 
 ```python
@@ -191,38 +193,34 @@ from prompt_engineering import list_tasks
 list_tasks()
 ```
 ```
-autocomplete
-autocomplete_analogy
-autocomplete_logical
-conditional_nlg
-topic_classification
-intent_classification
-sentiment_analysis
-slot_extraction
-simplification
-summarisation
-elaboration
-horror_story
-hashtags
-grammar_correction
-translate_to_teaser
-translate_to_german
-translate_to_french
-translate_to_spanish
-translate_to_japanese
-translate_to_csv
-translate_to_python
-translate_to_javascript
-translate_from_french
-translate_from_csv
-translate_from_python
-translate_from_emoji
-question_answering
-question_answering_javascript
-query_csv
-chatbot
-chatbot_ecommerce
-chatbot_contextual
+(
+ 'autocomplete',
+ 'autocomplete_analogy',
+ 'autocomplete_logical',
+ 'topic_classification',
+ 'sentiment_analysis',
+ 'simplification',
+ 'summarisation',
+ 'elaboration',
+ 'horror_story',
+ 'hashtags',
+ 'grammar_correction',
+ 'translate_to_csv',
+ 'translate_to_teaser',
+ 'translate_to_german',
+ 'translate_to_french',
+ 'translate_to_spanish',
+ 'translate_to_japanese',
+ 'translate_to_python',
+ 'translate_from_french',
+ 'translate_from_python',
+ 'translate_from_emoji',
+ 'question_answering',
+ 'question_answering_javascript',
+ 'query_csv',
+ 'chatbot',
+ 'chatbot_ecommerce'
+)
 ```
 ---
 
