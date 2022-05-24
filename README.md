@@ -8,10 +8,11 @@ pip install prompt_engineering
 ```python
 from prompt_engineering import api
 ```
+*Note: cache is enabled by default for all api calls. To allow for different responses, turn off cache*
 ---
 ### Jurassic (AI21Studio)
 ```python
-@api(endpoint="https://api.ai21.com/studio/v1/j1-large/complete", key=YOUR_AI21_KEY, hyperparameters=dict(temperature=.6))
+@api(endpoint="https://api.ai21.com/studio/v1/j1-large/complete", key=YOUR_AI21_KEY, hyperparameters=dict(temperature=.6), cache=False)
 def jurassic(data:dict) -> str:
     return data['completions'][0]['data']['text']
 ```
@@ -20,7 +21,7 @@ def jurassic(data:dict) -> str:
 
 ### GPT3 (OpenAI)
 ```python
-@api(endpoint="https://api.openai.com/v1/engines/text-davinci-002/completions", key=YOUR_OPENAI_KEY, hyperparameters=dict(temperature=.6))
+@api(endpoint="https://api.openai.com/v1/engines/text-davinci-002/completions", key=YOUR_OPENAI_KEY, hyperparameters=dict(temperature=.6),cache=False)
 def gpt3(data:dict) -> None:
     return data['choices'][0]['text']
 
@@ -30,7 +31,7 @@ def gpt3(data:dict) -> None:
 ### GPTJ (OxAPI)
 
 ```python
-@api(endpoint='https://api.oxolo.com/api/v1/model/nlp/gpt-j-6b/v1/inference', key=YOUR_OXAPI_KEY, hyperparameters=dict(temperature=.6, eos_words =["\n", "###"]))
+@api(endpoint='https://api.oxolo.com/api/v1/model/nlp/gpt-j-6b/v1/inference', key=YOUR_OXAPI_KEY, hyperparameters=dict(temperature=.6, eos_words =["\n", "###"]),cache=False)
 def gptj(data:dict) -> None:
     return data['results'][0]
 ```
@@ -107,21 +108,34 @@ python_generator(prompt="calculate the sum of even numbers from 4 to 40")
 ---
 ***Example 4: Advanced Prompts***
 ```python
-from prompt_engineering import format_table
+from prompt_engineering import to_csv
 
-@task("query_table")
-def query_table(prompt:str) -> str:    
-    return gpt3(dict(prompt=prompt))
+table = to_csv(data,column_names=("fruit","count","colour"),delimiter="|")
 ```
+```
+fruit|count|colour
+apple|1|red
+banana|2|yellow
+mango|0|orange
+```
+
+
 ```python
-table = dict(
-    name=["Majd","Oliver","Annie"],
-    favourite_food=["Pizza","Salad","Soup"],
-    gender=["Male","Male","Female"],
-)
-print(query_table(f"{format_table(table)}\nWho likes salad?"))
+gptj(dict(prompt=f'{table}\nWhat is the yellow fruit?'))
 ```
-> "A: Oliver"
+> "It is mango."
+
+```python
+@task("query_csv")
+def query_table(prompt:str) -> str:    
+    return gptj(dict(prompt=prompt))
+```
+
+```python
+query_table(prompt=f'{table}\nWhat is the yellow fruit?')
+```
+> "A: Banana"
+
 
 ---
 ```python
@@ -130,9 +144,11 @@ from prompt_engineering import list_tasks
 list_tasks()
 ```
 ```
-('autocomplete', 'autocomplete_analogy', 'autocomplete_logical', 'conditional_nlg', 'topic_classification', 'intent_classification', 'sentiment_analysis', 'slot_extraction', 'summarisation', 'elaboration', 'hashtags', 'simplification', 'translate_to_table', 'translate_to_python', 'translate_to_javascript', 'translate_from_table', 'translate_from_python', 'translate_from_emojis', 'question_answering', 'query_table', 'chatbot')
+('autocomplete', 'autocomplete_analogy', 'autocomplete_logical', 'conditional_nlg', 'topic_classification', 'intent_classification', 'sentiment_analysis', 'slot_extraction', 'summarisation', 'elaboration', 'hashtags', 'simplification', 'translate_to_csv', 'translate_to_python', 'translate_to_javascript', 'translate_from_csv', 'translate_from_python', 'translate_from_emojis', 'question_answering', 'query_csv', 'chatbot')
 ```
 ---
 
 ## ChangeLog
+- 0.0.3 to_csv method added. cache flag added to @api
+- 0.0.2 more prompts added
 - 0.0.1 initial release

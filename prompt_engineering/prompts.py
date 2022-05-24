@@ -1,3 +1,5 @@
+from prompt_engineering.utils import to_csv
+
 PROMPTS = dict(
     autocomplete=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter=""),
     autocomplete_analogy=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
@@ -89,7 +91,7 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    translate_to_table=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
+    translate_to_csv=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     translate_to_python=dict(
         description='Write a Python program for the instructions given',
         examples=[
@@ -102,7 +104,7 @@ PROMPTS = dict(
         input_target_delimiter="\n"
     ),
     translate_to_javascript=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
-    translate_from_table=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
+    translate_from_csv=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     translate_from_python=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     translate_from_emojis=dict(description=None,examples=[],example_delimiter="\n###\n",input_target_delimiter="\n"),
     question_answering=dict(
@@ -136,15 +138,21 @@ PROMPTS = dict(
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    query_table=dict(
+    query_csv=dict(
         description="Answer questions about the table.",
         examples=[
             (
-                '''Name | Birth place | Age | Personality | Friend
-Jane | Germany | 10 | Extroverted | Mike
-Mary | London | 200 | Introverted | Mohammed
-Edwardo | Spain | 30 | Extroverted | Ricardo
-Marina | Italy | 33 | Introverted | Saanvi''',
+                to_csv(
+                    data=[
+                        {"Name":"Jane","Birth place":"Germany","Age":"10","Personality":"Extroverted","Friend":"Mike"},
+                        {"Name":"Mary","Birth place":"London","Age":"200","Personality":"Introverted","Friend":"Mohammed"},
+                        {"Name":"Edwardo","Birth place":"Spain","Age":"30","Personality":"Extroverted","Friend":"Ricardo"},
+                        {"Name":"Jane","Birth place":"Germany","Age":"10","Personality":"Extroverted","Friend":"Ricardo"},
+                        {"Name":"Marina","Birth place":"Italy","Age":"33","Personality":"Introverted","Friend":"Saanvi"},
+                    ],
+                    column_names=["Name","Birth place","Age","Personality","Friend"],
+                    delimiter="|"
+                ),
                 '''Who is the oldest?
 A: Mary
 
@@ -161,12 +169,17 @@ Who lives in Italy?
 A: Marina'''
             ),
             (
-                '''Ship Name | Color | Total Passengers | Status | Captain
-Symphony | White | 7700 | Active | Mike
-Wonder | Grey | 7900 | Under Construction | Anna
-Odyssey | White | 5800 | Active | Mohammed
-Quantum | White | 5700 | Active | Ricardo
-Mariner | Grey | 4300 | Active | Saanvi''',
+                to_csv(
+                    data=[
+                        {"Ship Name":"Symphony","Color":"White","Total Passengers":"7700","Status":"Active","Captain":"Mike"},
+                        {"Ship Name":"Wonder","Color":"Grey","Total Passengers":"7900","Status":"Under Construction","Captain":"Anna"},
+                        {"Ship Name":"Odyssey","Color":"White","Total Passengers":"5800","Status":"Active","Captain":"Mohammed"},
+                        {"Ship Name":"Quantum","Color":"White","Total Passengers":"5700","Status":"Active","Captain":"Ricardo"},
+                        {"Ship Name":"Mariner","Color":"Grey","Total Passengers":"4300","Status":"Active","Captain":"Saanvi"},
+                    ],
+                    column_names=["Ship Name","Color","Total Passengers","Status","Captain"],
+                    delimiter="|"
+                ),
                 '''Which active ship carries the most passengers?
 A: Symphony
 

@@ -38,15 +38,19 @@ def task(task_name:str) -> callable:
         return modify_prompt 
     return _
 
-def api(endpoint:str, key:str, hyperparameters:dict) -> callable:
+def api(endpoint:str, key:str, hyperparameters:dict, cache:bool=True) -> callable:
     def _(process_response_json:callable) -> callable:
-        def call_endpoint(data:dict) -> None:
+        def call_endpoint(data:dict,memory:dict=dict()) -> None:
             payload = hyperparameters
             payload.update(data)
-            response = post(endpoint, json=payload, headers={
-                'Content-Type':'application/json',
-                'Authorization':f'Bearer {key}'
-            })
-            return process_response_json(data=response.json()) if response.ok else response.reason
+            prompt = payload.get('prompt')
+            if prompt not in memory or not cache:
+                response = post(endpoint, json=payload, headers={
+                    'Content-Type':'application/json',
+                    'Authorization':f'Bearer {key}'
+                })
+                result =  process_response_json(data=response.json()) if response.ok else response.reason
+                memory[prompt] = result
+            return memory.get(prompt)
         return call_endpoint
     return _

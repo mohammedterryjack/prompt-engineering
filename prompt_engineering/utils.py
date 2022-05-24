@@ -1,6 +1,14 @@
-from pandas import DataFrame
+from typing import List
+from csv import DictWriter 
+from io import StringIO 
 
-format_table = lambda table: ' | '.join(table.keys()) + "\n" + '\n'.join(map(
-    lambda data:' | '.join(data.values()),
-    DataFrame(table).transpose().to_dict().values()
-))
+def to_csv(data:List[dict], column_names:List[str], delimiter:str=",") -> str:
+    output = StringIO() 
+    writer = DictWriter(
+        output, 
+        fieldnames=[] if column_names is None else column_names,
+        delimiter=delimiter
+    )
+    writer.writeheader()
+    writer.writerows(data)
+    return output.getvalue()
