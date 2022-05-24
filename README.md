@@ -318,6 +318,3 @@ nlu("Can i book a table at a Bento or Sushi restaurant for Friday please")
 ---
 ## TODO
 - [x] complete all prompts
-- [] add decorator to dynamically update prompt with prior response (for context)
-- [] add contextual chatbot prompt
-- [] add conditional NLG prompt
