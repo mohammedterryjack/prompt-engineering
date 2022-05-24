@@ -551,18 +551,6 @@ randomly_split_dataset('finetune_data/', 'dataset.jsonl')''',
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
     ),
-    question_answering_javascript=dict(
-        description='''This is a chatbot that can answer questions about JavaScript:
-
-How do I combine arrays?
-JavaScript chatbot: You can use the concat() method.
-How do you make an alert appear after 10 seconds?
-JavaScript chatbot: You can use the setTimeout() method.
-''',
-        examples=[],
-        example_delimiter="",
-        input_target_delimiter="\n"
-    ),
     query_csv=dict(
         description="Answer questions about the table.",
         examples=[
@@ -617,70 +605,64 @@ A: 5700'''
         ],
         example_delimiter="\n###\n",
         input_target_delimiter="\n"
-    ),
-    chatbot=dict(
-        description='''The following is a text message conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
-        
-AI: What have you been up to?
-You: Watching old movies.
-AI: Did you watch anything interesting?
-You: ''',
-        examples=[],
-        example_delimiter="",
-        input_target_delimiter="\n"
-    ),
-    chatbot_ecommerce=dict(
-        description=None,
-        examples=[
-            (
-                "The following is a conversation between a user of an eCommerce store and a user operation associate called Max. Max is very kind and keen to help. The following are important points about the business policies:\n- Delivery takes up to 5 days\n- There is no return option\n\nUser gender: Female.\n\n",
-                '''Conversation:
-Hi, I have a question for you.
-Max: Hi there, happy to help!'''
-            ),
-            (
-                "The following is a conversation between a user of an eCommerce store and a user operation associate called Max. Max is very kind and keen to help. The following are important points about the business policies:\n- Delivery takes up to 5 days\n- There is no return option\n\nUser gender: Male.\n\n",
-                '''Conversation:
-Hi, had a question
-Max: Hi there, happy to help!
-Is there no way to return a product? I got your blue T-Shirt size small but it doesn't fit.
-Max: I'm sorry to hear that. Unfortunately we don't have a return policy. 
-That's a shame. 
-Max: Is there anything else i can do for you?
+    )
+)
 
-###'''
-            ),
-            (
-                "The following is a conversation between a user of an eCommerce store and a user operation associate called Max. Max is very kind and keen to help. The following are important points about the business policies:\n- Delivery takes up to 5 days\n- There is no return option\n\nUser gender: Female.\n\n",
-                '''Conversation:
-Hi, I was wondering when you'll have the "Blue & White" t-shirt back in stock?
-Max: Hi, happy to assist! We currently don't have it in stock. Do you want me to send you an email once we do?
-Yes!
-Max: Awesome. What's your email?
-anc@gmail.com
-Max: Great. I'll send you an email as soon as we get it.
-
-###'''
-            ),
-            (
-                "The following is a conversation between a user of an eCommerce store and a user operation associate called Max. Max is very kind and keen to help. The following are important points about the business policies:\n- Delivery takes up to 5 days\n- There is no return option\n\nUser gender: Female.\n\n",
-                '''Conversation:
-Hi, how much time does it take for the product to reach me?
-Max: Hi, happy to assist! It usually takes 5 working days to reach you.
-Got it! thanks. Is there a way to shorten that delivery time if i pay extra?
-Max: I'm sorry, no.
-Got it. How do i know if the White Crisp t-shirt will fit my size?
-Max: The size charts are available on the website.
-Can you tell me what will fit a young women.
-Max: Sure. Can you share her exact size?
-
-###'''
-            )
+CHAT_PROMPTS = dict(
+    friend=dict(
+        description="The following is a conversation with an called Max. Max is helpful, creative, clever, and very friendly.",
+        chat_history=[
+            "Max: What have you been up to?",
+            "You: Watching old movies.",
+            "Max: Did you watch anything interesting?",
         ],
-        example_delimiter="\n",
-        input_target_delimiter="\n"
+        user_prefix="You: ",
+        system_prefix="Max: ",
+        delimiter="\n",
     ),
+    ecommerce=dict(
+        description="The following is a conversation between a user of an eCommerce store and a user operation associate called Max. Max is very kind and keen to help. The following are important points about the business policies:\n- Delivery takes up to 5 days\n- There is no return option",
+        chat_history=[
+            "You: Hi, I have a question for you.",
+            "Max: Hi there, happy to help!",
+            "You: Is there no way to return a product? I got your blue T-Shirt size small but it doesn't fit.",
+            "Max: I'm sorry to hear that. Unfortunately we don't have a return policy.",
+            "You: That's a shame.",
+            "Max: Is there anything else i can do for you?"
+            "You: I was wondering when you'll have the 'Blue & White' t-shirt back in stock?",
+            "Max: Hi, happy to assist! We currently don't have it in stock. Do you want me to send you an email once we do?",
+            "You: Yes!",
+            "Max: Awesome. What's your email?",
+            "You: anc@gmail.com",
+            "Max: Great. I'll send you an email as soon as we get it.",
+            "You: how much time does it take for the product to reach me?",
+            "Max: Hi, happy to assist! It usually takes 5 working days to reach you.",
+            "You: Got it! thanks. Is there a way to shorten that delivery time if i pay extra?",
+            "Max: I'm sorry, no.",
+            "You: Got it. How do i know if the White Crisp t-shirt will fit my size?",
+            "Max: The size charts are available on the website.",
+            "You: Can you tell me what will fit a young women.",
+            "Max: Sure. Can you share her exact size?"
+        ],
+        user_prefix="You: ",
+        system_prefix="Max: ",
+        delimiter="\n",
+    ),
+    javascript_expert=dict(
+        description="Max is a chatbot that can answer questions about JavaScript:",
+        chat_history=[
+            "You: How do I combine arrays?",
+            "Max: You can use the concat() method.",
+            "You: How do you make an alert appear after 10 seconds?",
+            "Max: You can use the setTimeout() method."
+        ],
+        user_prefix="You: ",
+        system_prefix="Max: ",
+        delimiter="\n",
+    )
 )
 
 list_tasks = lambda : tuple(PROMPTS.keys())
-ERROR_MESSAGE = "'{task_name}' is an unrecognised task. Try one of the following:\n" + '\n'.join(list_tasks())
+list_chatbots = lambda : tuple(CHAT_PROMPTS.keys())
+PROMPT_ERROR = "'{task_name}' is an unrecognised task. Try one of the following:\n" + '\n'.join(list_tasks())
+CHAT_ERROR = "'{task_name}' is an unrecognised chat task. Try one of the following:\n" + '\n'.join(list_chatbots())
