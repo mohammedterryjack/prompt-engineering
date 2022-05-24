@@ -110,7 +110,15 @@ python_generator(prompt="calculate the sum of even numbers from 4 to 40")
 ```python
 from prompt_engineering import to_csv
 
-table = to_csv(data,column_names=("fruit","count","colour"),delimiter="|")
+table = to_csv(
+    data=[
+        dict(fruit="apple",count=1,colour="red"),
+        dict(fruit="banana",count=2,colour="yellow"),
+        dict(fruit="mango",count=0,colour="orange")
+    ],
+    column_names=("fruit","count","colour"),
+    delimiter="|"
+)
 ```
 ```
 fruit|count|colour
