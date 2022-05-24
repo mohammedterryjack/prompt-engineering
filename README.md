@@ -117,9 +117,7 @@ list_tasks()
  'translate_from_emoji',
  'question_answering',
  'question_answering_javascript',
- 'query_csv',
- 'chatbot',
- 'chatbot_ecommerce'
+ 'query_csv'
 )
 ```
 ---
@@ -181,7 +179,57 @@ sum(x for x in range(4,41,2))
 > 418
 
 ---
-***Example 4: Advanced (Question Answering on a Table)***
+***Example 4: Chatbot***
+
+```python
+from prompt_engineering import chatbot
+```
+*Note: `@chatbot` dynamically updates the prompt with the conversation so far so that the model can have a better contextual awareness and refer to things mentioned previously in the conversation*
+
+```python
+from prompt_engineering import list_chatbots
+```
+```
+(
+ 'friend',
+ 'ecommerce',
+ 'javascript_expert'
+)
+```
+```python
+@chatbot("friend")
+def chitchat(prompt:str) -> str:
+    return gpt3(dict(prompt=prompt))
+
+while True:
+    chitchat(prompt=input(">"))
+```
+> You: what are you doing?
+>> Max: Just chatting with you!
+
+> You: thats kinda boring
+>> Max: I don't think so. I enjoy talking to you.
+
+> You: do you now
+>> Max: Yes, I do. You're very friendly and easy to talk to.
+
+> You: thanks - you too
+>> Max: You're welcome.
+
+> You: my name is Mohammed
+>> Max: It's nice to meet you, Mohammed.
+
+> You: thanks
+>> Max: You're welcome.
+
+> You: whats my name?
+>> Max: Your name is Mohammed.
+
+> You: yes thats right
+>> Max: I'm glad I could help.
+
+---
+***Example 5: Advanced (Question Answering on a Table)***
 ```python
 from prompt_engineering import to_csv
 
@@ -220,7 +268,7 @@ query_table(prompt=f'{table}\nWhat is the yellow fruit?')
 > "A: Banana"
 
 ---
-***Example 5: Advanced (NLU)***
+***Example 6: Advanced (NLU)***
 
 ```python
 from prompt_engineering import from_csv
@@ -260,6 +308,7 @@ nlu("Can i book a table at a Bento or Sushi restaurant for Friday please")
 ---
 
 ## ChangeLog
+- 0.0.6 @chatbot added for dynamic prompts which enable contextual dialogues
 - 0.0.5 more prompts added. from_csv method added. nlu example
 - 0.0.4 more prompts added
 - 0.0.3 to_csv method added. cache flag added to @api
@@ -271,3 +320,4 @@ nlu("Can i book a table at a Bento or Sushi restaurant for Friday please")
 - [x] complete all prompts
 - [] add decorator to dynamically update prompt with prior response (for context)
 - [] add contextual chatbot prompt
+- [] add conditional NLG prompt
