@@ -152,11 +152,43 @@ from prompt_engineering import list_tasks
 list_tasks()
 ```
 ```
-('autocomplete', 'autocomplete_analogy', 'autocomplete_logical', 'conditional_nlg', 'topic_classification', 'intent_classification', 'sentiment_analysis', 'slot_extraction', 'summarisation', 'elaboration', 'hashtags', 'simplification', 'translate_to_csv', 'translate_to_python', 'translate_to_javascript', 'translate_from_csv', 'translate_from_python', 'translate_from_emojis', 'question_answering', 'query_csv', 'chatbot')
+autocomplete
+autocomplete_analogy
+autocomplete_logical
+conditional_nlg
+topic_classification
+intent_classification
+sentiment_analysis
+slot_extraction
+simplification
+summarisation
+elaboration
+horror_story
+hashtags
+grammar_correction
+translate_to_teaser
+translate_to_german
+translate_to_french
+translate_to_spanish
+translate_to_japanese
+translate_to_csv
+translate_to_python
+translate_to_javascript
+translate_from_french
+translate_from_csv
+translate_from_python
+translate_from_emoji
+question_answering
+question_answering_javascript
+query_csv
+chatbot
+chatbot_ecommerce
+chatbot_contextual
 ```
 ---
 
 ## ChangeLog
+- 0.0.4 more prompts added
 - 0.0.3 to_csv method added. cache flag added to @api
 - 0.0.2 more prompts added
 - 0.0.1 initial release
